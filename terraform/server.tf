@@ -1,5 +1,5 @@
 resource "aws_instance" "vpn-server" {
-  ami                                  = "ami-00e73ddc3a6fc7dfe"
+  ami                                  = "ami-0ac4dfaf1c5c0cce9"
   availability_zone                    = var.EC2_AV_ZONE
   disable_api_stop                     = false
   disable_api_termination              = false
@@ -30,10 +30,10 @@ resource "aws_instance" "vpn-server" {
   capacity_reservation_specification {
     capacity_reservation_preference = "open"
   }
-  cpu_options {
-    core_count       = 2
-    threads_per_core = 1
-  }
+  # cpu_options {
+  #   core_count       = 2
+  #   threads_per_core = 1
+  # }
   credit_specification {
     cpu_credits = "standard"
   }

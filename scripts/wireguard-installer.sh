@@ -26,11 +26,17 @@ Address = 10.0.1.0/24
 ListenPort = 51820
 PrivateKey = ${SERVER_PRIVATE_KEY} 
 PostUp = sysctl net.ipv4.ip_forward=1
-PostUp = iptables -A FORWARD -i wg0 -j ACCEPT
-PostUp = iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE
+PostUp = iptables -t nat -I POSTROUTING 1 -s 10.0.1.0/16 -o $INTERFACE -j MASQUERADE
+PostUp = iptables -I INPUT 1 -i wg0 -j ACCEPT
+PostUp = iptables -I FORWARD 1 -i $INTERFACE -o wg0 -j ACCEPT
+PostUp = iptables -I FORWARD 1 -i wg0 -o $INTERFACE -j ACCEPT
+PostUp = iptables -I INPUT 1 -i $INTERFACE -p udp --dport 51820 -j ACCEPT
 PostDown = sysctl net.ipv4.ip_forward=0
-PostDown = iptables -D FORWARD -i wg0 -j ACCEPT
-PostDown = iptables -t nat -D POSTROUTING -o $INTERFACE -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -s 10.0.1.0/16 -o $INTERFACE -j MASQUERADE
+PostDown = iptables -D INPUT -i wg0 -j ACCEPT
+PostDown = iptables -D FORWARD -i $INTERFACE -o wg0 -j ACCEPT
+PostDown = iptables -D FORWARD -i wg0 -o $INTERFACE -j ACCEPT
+PostDown = iptables -D INPUT -i $INTERFACE -p udp --dport 51820 -j ACCEPT
 
 [Peer]
 PublicKey = ${CLIENT_PUBLIC_KEY}  

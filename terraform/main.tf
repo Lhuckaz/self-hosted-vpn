@@ -6,12 +6,12 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket  = "tf-remote-state-vpn"
-    key     = "state/terraform.tfstate"
-    region  = "us-east-1"
-    encrypt = true
-  }
+  # backend "s3" {
+  #   bucket  = "tf-remote-state-vpn"
+  #   key     = "state/terraform.tfstate"
+  #   region  = "us-east-1"
+  #   encrypt = true
+  # }
 }
 
 provider "aws" {
